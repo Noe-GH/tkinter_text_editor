@@ -1,10 +1,11 @@
 import tkinter as tk
 from tkinter import filedialog
 from tkinter import messagebox
+from tkinter import ttk
 import traceback
 
 # Global variable that stores the name and the absolute path of the file in use.
-opened_file = ""
+opened_file = ''
 
 def opened_file_to_value(value):
     """
@@ -19,7 +20,7 @@ def new_file():
     Function that deletes the content of the Text() widget that represents the text area of the program.
     '''
     text_area.delete(1.0, tk.END)
-    opened_file_to_value("")
+    opened_file_to_value('')
 
 
 def open_file():
@@ -74,31 +75,56 @@ def save_file():
         pass
     
 
+def update_font():
+    font_style = spinbox_font.get()
+    font_size = spinbox_font_size.get()
+    text_area.config(font=f'{font_style} {font_size}')
+
 w = tk.Tk()
 
 # Starts Widgets creation ------------------------------------------------------------------------------------------------------------
-text_area = tk.Text(w, font="Times 12", width=1280, height=720)
 
 # Menu
 main_menu = tk.Menu(w)
 file_menu = tk.Menu(main_menu, tearoff=0)
-file_menu.add_command(label="New", command=new_file)
-file_menu.add_command(label="Open", command=open_file)
-file_menu.add_command(label="Save", command=save_file)
-file_menu.add_command(label="Save as", command=save_file_as)
-file_menu.add_command(label="Exit", command=w.quit)
+file_menu.add_command(label='New', command=new_file)
+file_menu.add_command(label='Open', command=open_file)
+file_menu.add_command(label='Save', command=save_file)
+file_menu.add_command(label='Save as', command=save_file_as)
+file_menu.add_command(label='Exit', command=w.quit)
+
+# Format controls:
+frame_controls = tk.Frame(w, height=300)
+font_lbl = tk.Label(frame_controls, text='Font: ')
+spinbox_font = tk.Spinbox(frame_controls, values=('Arial', 'Times', 'Verdana'))
+font_size_lbl = tk.Label(frame_controls, text="Font size: ")
+spinbox_font_size = tk.Spinbox(frame_controls, from_=1, to=60)
+button_update_font = tk.Button(frame_controls, text='Update font', command=update_font)
+
+# Text area:
+text_area = tk.Text(w, font='Times 12', width=1280, height=720)
 
 # Ends Widgets creation --------------------------------------------------------------------------------------------------------------
 
 # Starts Widgets placing  ------------------------------------------------------------------------------------------------------------
+main_menu.add_cascade(label='File', menu=file_menu)
+frame_controls.pack(fill='x')
+font_lbl.pack(side='left')
+spinbox_font.pack(side='left')
+font_size_lbl.pack(side='left')
+spinbox_font_size.pack(side='left')
+button_update_font.pack(side='left')
+
 text_area.pack()
-main_menu.add_cascade(label="Archivo", menu=file_menu)
+
+
+
 
 # Ends Widgets placing  --------------------------------------------------------------------------------------------------------------
 
-w.title("Bloc de notas Tkinter")
+w.title('Bloc de notas Tkinter')
 w.minsize(width=1280, height=720)
-w.geometry("1280x720")
+w.geometry('1280x720')
 w.config(menu=main_menu)
 w.mainloop()
 
